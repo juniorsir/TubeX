@@ -1,0 +1,4 @@
+# MANIFEST.in
+
+graft src/tubex/templates
+graft src/tubex/static

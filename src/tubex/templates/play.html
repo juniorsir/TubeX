@@ -1,0 +1,107 @@
+<!-- templates/play.html (with Progress Bar) -->
+{% extends "base.html" %}
+{% block content %}
+<h4 class="mb-3" id="video-title-display">{{ title }}</h4>
+
+<div class="video-container shadow-lg">
+    <video id="video-player" controls class="w-100 d-none">
+        Your browser does not support the video tag.
+    </video>
+    
+    <!-- This container will now show the progress bar OR the "playback not supported" message -->
+    <div id="placeholder-container" class="d-flex flex-column justify-content-center align-items-center" style="background-color: #000; aspect-ratio: 16/9; min-height: 250px;">
+        
+        <!-- NEW Progress Bar UI -->
+        <div id="progress-ui" class="w-75">
+            <div class="progress" role="progressbar" style="height: 20px;">
+                <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%"></div>
+            </div>
+            <p id="progress-text" class="text-center text-muted mt-2 small">Initializing...</p>
+        </div>
+        
+        <!-- "Playback Unsupported" message (hidden by default) -->
+        <div id="playback-unsupported" class="text-center p-3 d-none">
+            <i class="bi bi-exclamation-triangle-fill text-warning" style="font-size: 2rem;"></i>
+            <h5 class="mt-2">Direct playback is not supported for this source.</h5>
+            <p class="text-muted">You can still download the video using the button below.</p>
+        </div>
+    </div>
+</div>
+
+<div id="error-display" class="alert alert-danger mt-3 d-none"></div>
+
+<div class="mt-4 text-center">
+    <a href="javascript:history.back()" class="btn btn-secondary btn-lg me-2"><i class="bi bi-arrow-left"></i> Back</a>
+    <a id="download-button" href="{{ url_for('formats', video_id=video_id) }}" class="btn btn-info btn-lg" target="_blank" rel="noopener noreferrer">
+        <i class="bi bi-download"></i> Download This Video
+    </a>
+</div>
+
+<script>
+    // This script runs as soon as the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const videoId = "{{ video_id|e }}";
+        const videoPlayer = document.getElementById('video-player');
+        const placeholderContainer = document.getElementById('placeholder-container');
+        const progressUI = document.getElementById('progress-ui');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        const unsupportedMessage = document.getElementById('playback-unsupported');
+        const errorDisplay = document.getElementById('error-display');
+        const titleDisplay = document.getElementById('video-title-display');
+
+        // We use an async function to make the sequential calls cleaner
+        async function loadVideo() {
+            try {
+                // --- Step 1: Get Video Info ---
+                updateProgress(15, 'Getting video information...');
+                const infoResponse = await fetch(`/api/get_video_info/${encodeURIComponent(videoId)}`);
+                if (!infoResponse.ok) throw new Error('Failed to get video info.');
+                const infoData = await infoResponse.json();
+
+                titleDisplay.textContent = infoData.title;
+                document.title = infoData.title;
+
+                // --- Step 2: Get Stream URL ---
+                updateProgress(50, 'Requesting streamable URL...');
+                const urlResponse = await fetch(`/api/get_stream_url/${encodeURIComponent(videoId)}`);
+                if (!urlResponse.ok) throw new Error('Failed to get stream URL.');
+                const urlData = await urlResponse.json();
+
+                if (urlData.playback_supported) {
+                    // --- Step 3: Play Video ---
+                    updateProgress(100, 'Loading video player...');
+                    
+                    const source = document.createElement('source');
+                    source.src = urlData.stream_url;
+                    source.type = 'video/mp4';
+                    videoPlayer.appendChild(source);
+                    
+                    placeholderContainer.classList.add('d-none');
+                    videoPlayer.classList.remove('d-none');
+                    videoPlayer.load();
+                    videoPlayer.play();
+                } else {
+                    // Handle unsupported playback
+                    progressUI.classList.add('d-none');
+                    unsupportedMessage.classList.remove('d-none');
+                }
+
+            } catch (error) {
+                console.error('Error loading video:', error);
+                progressUI.classList.add('d-none');
+                errorDisplay.textContent = `Error: ${error.message || 'Could not load video.'}`;
+                errorDisplay.classList.remove('d-none');
+            }
+        }
+
+        function updateProgress(percent, text) {
+            progressBar.style.width = percent + '%';
+            progressText.textContent = text;
+        }
+
+        // Start the process
+        loadVideo();
+    });
+</script>
+{% endblock %}

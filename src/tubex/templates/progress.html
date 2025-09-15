@@ -1,0 +1,99 @@
+<!-- templates/progress.html -->
+{% extends "base.html" %}
+{% block content %}
+<div class="card bg-dark-subtle border-secondary">
+    <div class="card-header">
+        <h4 class="mb-0">Downloading...</h4>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title" id="video-title">{{ title }}</h5>
+        
+        <div class="progress" role="progressbar" style="height: 25px;">
+            <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%">0%</div>
+        </div>
+        
+        <div id="status-text" class="mt-2 text-muted">
+            Status: Starting...
+        </div>
+
+        <div id="final-status" class="mt-3 d-none">
+            <!-- This will be shown when the download is complete or fails -->
+        </div>
+    </div>
+</div>
+
+<!-- templates/progress.html -->
+
+<!-- ... (keep the HTML body part the same) ... -->
+
+<script>
+    const taskId = "{{ task_id }}";
+    const progressBar = document.getElementById('progress-bar');
+    const statusText = document.getElementById('status-text');
+    const finalStatus = document.getElementById('final-status');
+    const videoTitle = document.getElementById('video-title');
+
+    function updateProgress() {
+        fetch(`/status/${taskId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (!data || data.status === 'not_found') {
+                    statusText.textContent = "Error: Task not found.";
+                    clearInterval(intervalId);
+                    return;
+                }
+
+                const stage = data.stage || 'Starting...';
+                const progress = data.progress || 0;
+
+                // Update progress bar
+                progressBar.style.width = progress + '%';
+                
+                // Update the text inside the progress bar based on the stage
+                if (stage.toLowerCase().includes('merger') || stage.toLowerCase().includes('ffmpeg') || stage.toLowerCase().includes('extractaudio')) {
+                    progressBar.textContent = 'Processing...';
+                    // Keep the bar animated to show activity even if at 100%
+                    if (!progressBar.classList.contains('progress-bar-animated')) {
+                        progressBar.classList.add('progress-bar-animated');
+                    }
+                } else {
+                    progressBar.textContent = Math.round(progress) + '%';
+                }
+
+                // Update detailed status text below the bar
+                let statusString = `Stage: <strong>${stage}</strong>`;
+                if (data.status === 'downloading' && stage === 'Downloading...') {
+                    statusString += ` | Total Size: ${data.size || 'N/A'} | Speed: ${data.speed || 'N/A'} | ETA: ${data.eta || 'N/A'}`;
+                }
+                statusText.innerHTML = statusString;
+
+                // Handle final states (completed or error)
+                if (data.status === 'completed' || data.status === 'error') {
+                    clearInterval(intervalId);
+                    progressBar.classList.remove('progress-bar-animated', 'progress-bar-striped');
+                    
+                    if (data.status === 'completed') {
+                        progressBar.classList.add('bg-success');
+                        progressBar.style.width = '100%';
+                        progressBar.textContent = 'Complete!';
+                        finalStatus.innerHTML = `<div class="alert alert-success mt-3">Download complete!</div><a href="{{ url_for('files') }}" class="btn btn-primary">Go to Files</a>`;
+                    } else {
+                        progressBar.classList.add('bg-danger');
+                        progressBar.style.width = '100%';
+                        progressBar.textContent = 'Failed';
+                        finalStatus.innerHTML = `<div class="alert alert-danger mt-3">Download failed. Reason: ${data.error || 'Unknown error'}</div><a href="{{ url_for('index') }}" class="btn btn-secondary">Back to Search</a>`;
+                    }
+                    finalStatus.classList.remove('d-none');
+                }
+            })
+            .catch(err => {
+                console.error("Error fetching status:", err);
+                statusText.innerHTML = "<strong>Error fetching status. Check console.</strong>";
+                clearInterval(intervalId);
+            });
+    }
+
+    const intervalId = setInterval(updateProgress, 1500);
+    updateProgress(); // Initial call
+</script>
+{% endblock %}

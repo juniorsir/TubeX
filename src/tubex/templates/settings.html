@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4"><i class="bi bi-gear-fill"></i> Application Settings</h2>
+
+<div class="card bg-dark-subtle border-secondary">
+    <div class="card-header">
+        Configuration
+    </div>
+    <div class="card-body">
+        <form action="{{ url_for('settings') }}" method="POST">
+            <!-- Download Path Setting -->
+            <div class="mb-3">
+                <label for="download_path" class="form-label">Download Folder Path</label>
+                <input type="text" class="form-control" id="download_path" name="download_path" value="{{ config.DOWNLOAD_PATH }}" required>
+                <div class="form-text">
+                    The absolute path on the server where downloaded files will be saved.
+                </div>
+            </div>
+
+            <!-- Default Audio Format Setting -->
+            <div class="mb-3">
+                <label for="audio_format" class="form-label">Default Audio Format</label>
+                <select class="form-select" id="audio_format" name="audio_format">
+                    <option value="m4a" {% if config.DEFAULT_AUDIO_FORMAT == 'm4a' %}selected{% endif %}>M4A (AAC, Best Compatibility)</option>
+                    <option value="mp3" {% if config.DEFAULT_AUDIO_FORMAT == 'mp3' %}selected{% endif %}>MP3 (Good Compatibility)</option>
+                    <option value="opus" {% if config.DEFAULT_AUDIO_FORMAT == 'opus' %}selected{% endif %}>Opus (High Quality, Niche)</option>
+                    <option value="wav" {% if config.DEFAULT_AUDIO_FORMAT == 'wav' %}selected{% endif %}>WAV (Uncompressed)</option>
+                </select>
+                <div class="form-text">
+                    The audio format used for the "Get Audio" button and audio-only downloads.
+                </div>
+            </div>
+
+            <!-- Password Protection Setting -->
+            <div class="mb-4">
+                <label for="password" class="form-label">Set/Change Admin Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Leave blank to make no change">
+                <div class="form-text">
+                    Set a password to protect access to this dashboard. Leave this blank to keep the current password. If you want to disable the password, you must edit the config file manually.
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg">Save Settings</button>
+        </form>
+    </div>
+    <div class="card-footer text-muted small">
+        Note: The server must be restarted for all changes to take full effect.
+    </div>
+</div>
+{% endblock %}

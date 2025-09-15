@@ -1,0 +1,34 @@
+# pyproject.toml
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "TubeX" # Changed to match your project
+version = "1.0.0" 
+authors = [ { name="JuniorSir", email="juniorsir011@gmail.com" }, ]
+description = "A web dashboard to search, play, and download YouTube videos using yt-dlp."
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "Flask",
+    "yt-dlp",
+    "youtube-search-python",
+    "requests",
+    "packaging",
+    "waitress",
+]
+
+[project.scripts]
+# The entry point now points to the package named 'tubex'
+tubex = "tubex.cli:main"
+
+# --- THIS SECTION IS NEW AND CRUCIAL ---
+[tool.setuptools.packages.find]
+where = ["src"]  # Look for packages in the 'src' directory

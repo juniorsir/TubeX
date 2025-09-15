@@ -1,0 +1,6 @@
+Flask
+yt-dlp
+youtube-search-python
+requests
+packaging
+waitress

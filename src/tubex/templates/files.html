@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4"><i class="bi bi-folder-fill"></i> Files & Downloads</h2>
+
+<!-- ======================================================= -->
+<!--    Dynamic Container for Active and Queued Downloads    -->
+<!-- ======================================================= -->
+<!-- This div is initially empty. JavaScript will fetch data -->
+<!-- from the /api/get_active_tasks endpoint and build the   -->
+<!-- HTML for the active/queued downloads here.              -->
+<div id="active-downloads-container">
+    <!-- A loader can be placed here for better initial UX -->
+    <div class="text-center text-muted my-4">
+        <div class="spinner-border spinner-border-sm" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <span class="ms-2">Loading active downloads...</span>
+    </div>
+</div>
+
+
+<!-- ======================================================= -->
+<!--            Static Sections (Rendered by Server)         -->
+<!-- ======================================================= -->
+
+<!-- Section for Recently Finished Tasks -->
+{% if finished_tasks %}
+    <h4 class="text-muted mb-3">Recently Finished</h4>
+    <div class="list-group mb-4">
+        {% for task in finished_tasks %}
+            <div class="list-group-item bg-dark-subtle border-secondary">
+                <div class="d-flex w-100 justify-content-between">
+                    <p class="mb-1 text-truncate" title="{{ task.title }}">{{ task.title }}</p>
+                    {% if task.status == 'completed' %}
+                        <small class="text-success flex-shrink-0">Completed</small>
+                    {% else %}
+                        <small class="text-danger flex-shrink-0" title="{{ task.error|default('Unknown error') }}">Failed</small>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<!-- Section for Completed Files -->
+<h4 class="text-muted mb-3">Completed Files</h4>
+<div class="list-group">
+    {% if completed_files %}
+        {% for file in completed_files %}
+        <div class="list-group-item bg-dark-subtle border-secondary d-flex justify-content-between align-items-center">
+            <span class="text-truncate me-3" title="{{ file }}">
+                <i class="bi bi-file-earmark-check me-2 text-success"></i>{{ file }}
+            </span>
+            <div class="ms-auto flex-shrink-0">
+                <a href="{{ url_for('download_file', filename=file) }}" class="btn btn-sm btn-primary" title="Download file">
+                    <i class="bi bi-download"></i>
+                </a>
+                <button class="btn btn-sm btn-danger" onclick="deleteFile('{{ file|e }}')" title="Delete file">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="list-group-item bg-dark-subtle border-secondary">
+            <p class="mb-0">No completed files found in the downloads folder.</p>
+        </div>
+    {% endif %}
+</div>
+
+
+<!-- ======================================================= -->
+<!--                       JavaScript                        -->
+<!-- ======================================================= -->
+<script>
+    function deleteFile(filename) {
+        if (confirm(`Are you sure you want to delete "${filename}"?`)) {
+            const formData = new FormData();
+            formData.append('filename', filename);
+
+            fetch("{{ url_for('delete_file') }}", { method: 'POST', body: formData })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.reload();
+                    } else {
+                        alert(`Error: ${data.error}`);
+                    }
+                })
+                .catch(error => alert('An error occurred while trying to delete the file.'));
+        }
+    }
+
+    function updateActiveTasks() {
+        fetch("{{ url_for('api_get_active_tasks') }}")
+            .then(response => response.json())
+            .then(tasks => {
+                const container = document.getElementById('active-downloads-container');
+                if (tasks.length === 0) {
+                    container.innerHTML = ''; // Clear the container if no tasks are active
+                    return;
+                }
+
+                let html = '<h4 class="text-muted mb-3">Active & Queued</h4><div class="list-group mb-4">';
+                tasks.forEach(task => {
+                    const progress = task.progress || 0;
+                    const stage = task.stage || 'Starting...';
+                    const title = task.title || 'Untitled';
+                    const isQueued = task.status === 'queued' || stage === 'Waiting in queue...';
+
+                    html += `
+                        <a href="/progress/${task.id}" class="list-group-item list-group-item-action bg-dark-subtle border-secondary">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1 text-truncate" title="${title}">${title}</h5>
+                                <small class="${isQueued ? 'text-secondary' : 'text-primary'}">${isQueued ? 'Queued' : 'In Progress'}</small>
+                            </div>
+                            <div class="progress" role="progressbar" style="height: 10px;">
+                                <div class="progress-bar ${isQueued ? 'bg-secondary' : 'progress-bar-striped progress-bar-animated'}" style="width: ${progress}%"></div>
+                            </div>
+                            <small class="text-muted">${stage}</small>
+                        </a>
+                    `;
+                });
+                html += '</div>';
+                container.innerHTML = html;
+            });
+    }
+
+    // --- SCRIPT EXECUTION ---
+    // Start polling every 3 seconds
+    const intervalId = setInterval(updateActiveTasks, 3000);
+    // Initial call to load the data immediately
+    updateActiveTasks();
+</script>
+
+{% endblock %}

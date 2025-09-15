@@ -1,0 +1,81 @@
+<!-- templates/formats.html -->
+{% extends "base.html" %}
+{% block content %}
+<h3 class="mb-1">Download Options for:</h3>
+<h4 class="mb-4 text-info">{{ title }}</h4>
+<form action="{{ url_for('download') }}" method="post">
+    <input type="hidden" name="video_id" value="{{ video_id }}">
+    <input type="hidden" name="title" value="{{ title }}">
+    <div class="mb-3">
+        <label for="format_code" class="form-label">Select a format to download:</label>
+        <div class="list-group">
+            {% for format in formats %}
+            <!-- ADD data-is-audio-only attribute here -->
+            <label class="list-group-item list-group-item-action bg-dark-subtle border-secondary">
+                <input type="radio" name="format_code" value="{{ format.id }}" 
+                       data-is-video-only="{{ format.is_video_only|lower }}" 
+                       data-is-audio-only="{{ format.is_audio_only|lower }}" 
+                       required class="form-check-input me-2">
+                <strong>{{ format.description }}</strong>
+                <small class="text-muted ms-2">(ID: {{ format.id }}, Size: {{ format.size }})</small>
+                {% if format.is_video_only %}
+                <span class="badge bg-warning text-dark ms-2">Will merge with best audio</span>
+                {% endif %}
+            </label>
+            {% endfor %}
+        </div>
+        <div id="subtitle-section" class="mb-3" style="display: none;">
+            <label for="sub_lang" class="form-label">Embed Subtitles (Optional):</label>
+            <select name="sub_lang" id="sub_lang_select" class="form-select">
+                <option value="none">No Subtitles</option>
+                <!-- Options will be added here by JavaScript -->
+            </select>
+        </div>
+        <div id="subtitle-loader" class="text-muted small">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Loading available subtitles...
+        </div>
+    </div>
+    <!-- Add a new hidden input for audio flag -->
+    <input type="hidden" id="is_video_only_hidden" name="is_video_only" value="false">
+    <input type="hidden" id="is_audio_only_hidden" name="is_audio_only" value="false">
+    <button type="submit" class="btn btn-primary btn-lg">Start Download</button>
+</form>
+
+<script>
+    // Update the script to handle both hidden inputs
+    document.querySelectorAll('input[name="format_code"]').forEach(radio => {
+        radio.addEventListener('change', (event) => {
+            document.getElementById('is_video_only_hidden').value = event.target.getAttribute('data-is-video-only');
+            document.getElementById('is_audio_only_hidden').value = event.target.getAttribute('data-is-audio-only');
+        });
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+        const videoId = "{{ video_id|url_encode_path }}";
+        const subSection = document.getElementById('subtitle-section');
+        const subLoader = document.getElementById('subtitle-loader');
+        const subSelect = document.getElementById('sub_lang_select');
+
+        fetch(`/api/get_subtitles/${videoId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.subtitles && data.subtitles.length > 0) {
+                    data.subtitles.forEach(lang => {
+                        const option = document.createElement('option');
+                        option.value = lang;
+                        option.textContent = lang;
+                        subSelect.appendChild(option);
+                    });
+                    subLoader.style.display = 'none';
+                    subSection.style.display = 'block';
+                } else {
+                    subLoader.textContent = 'No subtitles found for this video.';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching subtitles:', error);
+                subLoader.textContent = 'Could not load subtitles.';
+            });
+    });
+</script>
+{% endblock %}

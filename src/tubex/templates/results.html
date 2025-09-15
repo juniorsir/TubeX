@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4">Search Results for "<span class="text-primary">{{ query }}</span>"</h2>
+
+{% if results %}
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    {% for video in results %}
+    <div class="col">
+        <div class="card video-card h-100">
+            <!-- Thumbnail link with a fallback placeholder and loading class -->
+            <a href="{{ url_for('play', video_id=video.id|url_encode_path, title=video.title) }}" class="loading-btn-img">
+                <img src="{{ video.thumbnails[0].url if video.thumbnails else url_for('static', filename='placeholder.png') }}" class="card-img-top" alt="{{ video.title }}">
+            </a>
+           
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">{{ video.title }}</h5>
+                <p class="card-text text-muted">{{ video.channel.name }} &bull; {{ video.duration }}</p>
+                
+                <!-- Buttons are pushed to the bottom of the card -->
+                <div class="mt-auto pt-3">
+                    <a href="{{ url_for('play', video_id=video.id|url_encode_path, title=video.title) }}" class="btn btn-sm btn-success w-100 mb-2 loading-btn"><i class="bi bi-play-fill"></i> Play</a>
+                    <a href="{{ url_for('formats', video_id=video.id|url_encode_path) }}" class="btn btn-sm btn-info w-100 mb-2 loading-btn"><i class="bi bi-download"></i> Download Options</a>
+                    
+                    <!-- "Get Audio" Quick Download Button -->
+                    <!-- This uses a form to send a POST request as required by the /quick_download_audio route -->
+                    <form action="{{ url_for('quick_download_audio', video_id=video.id|url_encode_path) }}" method="POST" class="d-grid">
+                        <button type="submit" class="btn btn-sm btn-secondary w-100 loading-btn"><i class="bi bi-music-note"></i> Get Audio</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="text-center">
+    <p class="lead">No results found for your search.</p>
+    <a href="{{ url_for('index') }}" class="btn btn-primary">Back to Search</a>
+</div>
+{% endif %}
+
+
+<!-- JavaScript for instant loading feedback on clicks -->
+<script>
+// Handles clicks on buttons
+document.querySelectorAll('.loading-btn').forEach(button => {
+    button.addEventListener('click', function(event) {
+        // Only show loading for standard left-clicks
+        if (event.button === 0 && !event.ctrlKey && !event.metaKey) {
+            if (this.tagName === 'A') {
+                this.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`;
+            } else { // It's a button in a form
+                this.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Queuing...`;
+            }
+            this.classList.add('disabled');
+        }
+    });
+});
+
+// Handles clicks on the thumbnail images
+document.querySelectorAll('.loading-btn-img').forEach(imgLink => {
+    imgLink.addEventListener('click', function(event) {
+        if (event.button === 0 && !event.ctrlKey && !event.metaKey) {
+            const playButton = imgLink.closest('.video-card').querySelector('.btn-success');
+            if(playButton) {
+                playButton.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`;
+                playButton.classList.add('disabled');
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

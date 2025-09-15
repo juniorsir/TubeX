@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="mb-1"><i class="bi bi-collection-play-fill text-primary"></i> Playlist Content</h2>
+        <p class="lead text-muted text-truncate" title="{{ title }}">{{ title }}</p>
+    </div>
+</div>
+
+{% if videos %}
+<!-- The form wraps the entire list and the download button -->
+<form action="{{ url_for('download_playlist') }}" method="POST">
+    <div class="card bg-dark-subtle border-secondary">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="form-check">
+                <!-- "Select All" checkbox -->
+                <input class="form-check-input" type="checkbox" value="" id="select-all-checkbox">
+                <label class="form-check-label fw-bold" for="select-all-checkbox">
+                    Select All ({{ videos|length }} videos)
+                </label>
+            </div>
+        </div>
+        
+        <!-- List of videos in the playlist -->
+        <ul class="list-group list-group-flush">
+            {% for video in videos %}
+            <li class="list-group-item bg-dark-subtle border-secondary d-flex justify-content-between align-items-center">
+                <div class="form-check me-3">
+                    <input class="form-check-input video-checkbox" type="checkbox" name="video_ids" value="{{ video.id }}" id="video-{{ loop.index }}">
+                    <label class="form-check-label text-truncate" for="video-{{ loop.index }}" title="{{ video.title }}">
+                        {{ video.title }}
+                    </label>
+                </div>
+                {% if video.duration %}
+                    <span class="badge bg-secondary rounded-pill flex-shrink-0">{{ video.duration }}</span>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+        
+        <div class="card-footer text-center">
+            <!-- The submit button for the form -->
+            <button type="submit" class="btn btn-primary btn-lg loading-btn">
+                <i class="bi bi-download"></i> Download Selected Videos
+            </button>
+        </div>
+    </div>
+</form>
+{% else %}
+<div class="text-center">
+    <p class="lead">No videos found in this playlist or channel.</p>
+    <a href="{{ url_for('index') }}" class="btn btn-primary">Back to Search</a>
+</div>
+{% endif %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const selectAllCheckbox = document.getElementById('select-all-checkbox');
+    const videoCheckboxes = document.querySelectorAll('.video-checkbox');
+
+    selectAllCheckbox.addEventListener('change', function() {
+        videoCheckboxes.forEach(checkbox => { checkbox.checked = this.checked; });
+    });
+
+    document.querySelectorAll('.loading-btn').forEach(button => {
+        button.addEventListener('click', function(event) {
+            if (event.button === 0) {
+                const anyChecked = Array.from(videoCheckboxes).some(cb => cb.checked);
+                if (!anyChecked) {
+                    alert('Please select at least one video to download.');
+                    event.preventDefault();
+                    return;
+                }
+                this.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Queuing...`;
+                this.classList.add('disabled');
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

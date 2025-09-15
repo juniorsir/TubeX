@@ -1,0 +1,16 @@
+Metadata-Version: 2.4
+Name: TubeX
+Version: 1.0.0
+Summary: A web dashboard to search, play, and download YouTube videos using yt-dlp.
+Author-email: JuniorSir <juniorsir011@gmail.com>
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: Flask
+Requires-Dist: yt-dlp
+Requires-Dist: youtube-search-python
+Requires-Dist: requests
+Requires-Dist: packaging
+Requires-Dist: waitress

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="text-center mb-5">
+    <h1 class="display-4 fw-bold">Search or Paste URL</h1>
+    <p class="lead text-muted">Enter a search term for YouTube, or paste a video URL from any supported site.</p>
+    <form action="{{ url_for('search') }}" method="get" class="d-flex justify-content-center">
+        <div class="input-group" style="max-width: 600px;">
+            <input type="text" name="q" class="form-control form-control-lg" placeholder="Search YouTube or paste a URL..." required autofocus>
+            <button type="submit" class="btn btn-primary btn-lg"><i class="bi bi-arrow-right-circle"></i> Go</button>
+        </div>
+    </form>
+</div>
+{% if history %}
+<h2 class="mb-4"><i class="bi bi-clock-history"></i> Recently Viewed</h2>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    {% for item in history %}
+    <div class="col">
+        <div class="card video-card h-100">
+            <a href="{{ url_for('play', video_id=item.id|url_encode_path, title=item.title) }}" class="loading-btn-img">
+                <img src="{{ item.thumbnail if item.thumbnail else url_for('static', filename='placeholder.png') }}" class="card-img-top" alt="{{ item.title }}">
+            </a>
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">{{ item.title }}</h5>
+                <div class="mt-auto pt-3">
+                    <a href="{{ url_for('play', video_id=item.id|url_encode_path, title=item.title) }}" class="btn btn-sm btn-success w-100 mb-2 loading-btn"><i class="bi bi-play-fill"></i> Play</a>
+                    <a href="{{ url_for('formats', video_id=item.id|url_encode_path) }}" class="btn btn-sm btn-info w-100 mb-2 loading-btn"><i class="bi bi-download"></i> Options</a>
+                    <form action="{{ url_for('quick_download_audio', video_id=item.id|url_encode_path) }}" method="POST" class="d-grid">
+                        <button type="submit" class="btn btn-sm btn-secondary w-100 loading-btn"><i class="bi bi-music-note"></i> Get Audio</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+<script>
+document.querySelectorAll('.loading-btn').forEach(button => {
+    button.addEventListener('click', function(event) {
+        if (event.button === 0 && !event.ctrlKey && !event.metaKey) {
+            this.innerHTML = `<span class="spinner-border spinner-border-sm"></span> ${this.tagName === 'A' ? 'Loading...' : 'Queuing...'}`;
+            this.classList.add('disabled');
+        }
+    });
+});
+document.querySelectorAll('.loading-btn-img').forEach(imgLink => {
+    imgLink.addEventListener('click', function(event) {
+        if (event.button === 0 && !event.ctrlKey && !event.metaKey) {
+            const playButton = imgLink.closest('.video-card').querySelector('.btn-success');
+            if(playButton) {
+                playButton.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Loading...`;
+                playButton.classList.add('disabled');
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

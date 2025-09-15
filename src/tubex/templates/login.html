@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card bg-dark-subtle border-secondary">
+            <div class="card-header">
+                <h4 class="mb-0 text-center"><i class="bi bi-lock-fill"></i> Authentication Required</h4>
+            </div>
+            <div class="card-body">
+                <p class="text-center text-muted">Please enter the password to access the dashboard.</p>
+                
+                <!-- The form submits the password back to the same /login URL -->
+                <form method="POST" action="{{ url_for('login', next=request.args.get('next', '')) }}">
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</for>
+                        <input type="password" class="form-control form-control-lg" id="password" name="password" required autofocus>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">Login</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

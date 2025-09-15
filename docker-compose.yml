@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  tubex:
+    build: .
+    container_name: tubex
+    ports:
+      - "8089:8089"
+    volumes:
+      # Map a local downloads folder to the container's downloads
+      - ./downloads:/root/Downloads/TubeX
+      # Map a local config folder to the container's config
+      - ./config:/root/.config/tubex
+    restart: unless-stopped
