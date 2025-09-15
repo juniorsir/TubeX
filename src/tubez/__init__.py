@@ -4,13 +4,13 @@ from pathlib import Path
 from flask import Flask
 
 # --- Package Information ---
-__version__ = "1.0.3"
+__version__ = "1.0.4"
 authors = [
     {"name": "JuniorSir", "email": "juniorsir011@gmail.com"}
 ]
 # --- Default Configuration ---
 DEFAULT_CONFIG = {
-    "DOWNLOAD_PATH": str(Path.home() / 'Downloads' / 'TubeX'),
+    "DOWNLOAD_PATH": str(Path.home() / 'Downloads' / 'TubeZ'),
     "PORT": 8089,
     "DEFAULT_AUDIO_FORMAT": "m4a",
     "THEME": "dark",
@@ -19,7 +19,7 @@ DEFAULT_CONFIG = {
 
 # --- User-specific Paths ---
 HOME_DIR = Path.home()
-CONFIG_DIR = HOME_DIR / '.config' / 'tubex'
+CONFIG_DIR = HOME_DIR / '.config' / 'tubez'
 CONFIG_FILE = CONFIG_DIR / 'config.json'
 HISTORY_FILE = CONFIG_DIR / 'history.json'
 

@@ -1,4 +1,4 @@
-# src/tubex/cli.py
+# src/tubez/cli.py
 
 import argparse
 import logging
@@ -11,12 +11,12 @@ def main():
     
     # --- NEW: Argument Parsing ---
     parser = argparse.ArgumentParser(
-        description="Run the TubeX web server.",
+        description="Run the TubeZ web server.",
         formatter_class=argparse.RawTextHelpFormatter # For better help text formatting
     )
     parser.add_argument(
         '--debug',
-        action='store_true', # This makes it a flag, e.g., `tubex --debug`
+        action='store_true', # This makes it a flag, e.g., `tubez --debug`
         help="""Enable debug mode.
 This will:
   - Show detailed request logs in the terminal.
@@ -39,7 +39,7 @@ This will:
         log = logging.getLogger('werkzeug')
         log.setLevel(logging.ERROR)
 
-        print("🚀 TubeX Server starting...")
+        print("🚀 TubeZ Server starting...")
         print(f"📂 Downloads will be saved in: {DOWNLOAD_FOLDER}")
         print(f"📂 History & Config is in: {CONFIG_DIR}")
         print(f"🌐 Open http://127.0.0.1:8089 in your browser")

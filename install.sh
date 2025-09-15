@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # =======================================================
-#    TubeX - Advanced Dynamic Installer
+#    TubeZ - Advanced Dynamic Installer
 #
 #    Features:
 #    - ASCII art welcome screen
@@ -15,7 +15,7 @@
 
 # --- Configuration ---
 # IMPORTANT: Replace this with your actual PUBLIC GitHub repository URL
-REPO_URL="https://github.com/juniorsir/TubeX.git"
+REPO_URL="https://github.com/juniorsir/TubeZ.git"
 
 # --- UI Colors and Styles ---
 GREEN='\033[0;32m'
@@ -129,12 +129,12 @@ install_tubex() {
 clear
 echo -e "${BLUE}"
 cat << "EOF"
- _____     _         __   __
-|_   _|   | |        \ \ / /
-  | |_   _| |__   ___ \ V /
-  | | | | | '_ \ / _ \/ \ \
-  | | |_| | |_) |  __/ /^\ \
-  \_/\__,_|_.__/ \___\/   \/
+  _____     _           ______
+|_   _|   | |         |___  /
+  | |_   _| |__   ___    / /
+  | | | | | '_ \ / _ \  / /
+  | | |_| | |_) |  __/./ /___
+  \_/\__,_|_.__/ \___|\_____/
 
 EOF
 echo -e "${NC}"

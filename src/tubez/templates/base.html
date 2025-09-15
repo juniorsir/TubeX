@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TubeX</title>
+    <title>TubeZ</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
@@ -11,7 +11,7 @@
 <body>
     <nav class="navbar navbar-expand-lg sticky-top mb-4">
         <div class="container">
-            <a class="navbar-brand fw-bold me-auto" href="{{ url_for('index') }}"><i class="bi bi-film"></i> TubeX</a>
+            <a class="navbar-brand fw-bold me-auto" href="{{ url_for('index') }}"><i class="bi bi-film"></i> TubeZ</a>
             <div class="d-flex align-items-center">
                 {% if session.logged_in %}
                  
@@ -76,10 +76,10 @@
             <div class="modal-content bg-dark-subtle border-secondary">
                 <div class="modal-header"><h5 class="modal-title"><i class="bi bi-cloud-arrow-down-fill text-primary"></i> Update Required</h5></div>
                 <div class="modal-body">
-                    <p>A new version of TubeX is available!</p>
+                    <p>A new version of TubeZ is available!</p>
                     <p>Your Version: <strong id="current-version-text"></strong><br>Latest Version: <strong id="latest-version-text" class="text-success"></strong></p>
                     <p class="mt-4">Please update to continue:</p>
-                    <div class="input-group"><input type="text" class="form-control" value="pip install --upgrade TubeX" readonly id="update-command-text"><button class="btn btn-outline-secondary" onclick="copyCommand()" id="copy-button"><i class="bi bi-clipboard"></i></button></div>
+                    <div class="input-group"><input type="text" class="form-control" value="pip install --upgrade TubeZ" readonly id="update-command-text"><button class="btn btn-outline-secondary" onclick="copyCommand()" id="copy-button"><i class="bi bi-clipboard"></i></button></div>
                     <p class="text-muted small mt-2">After updating, please restart the server.</p>
                 </div>
             </div>
@@ -139,7 +139,7 @@
         {% endif %}
 
         function copyCommand() {
-            navigator.clipboard.writeText("pip install --upgrade TubeX").then(() => {
+            navigator.clipboard.writeText("pip install --upgrade TubeZ").then(() => {
                 const copyButton = document.getElementById('copy-button');
                 const original = copyButton.innerHTML;
                 copyButton.innerHTML = '<i class="bi bi-check-lg text-success"></i>';
