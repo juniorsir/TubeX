@@ -7,7 +7,7 @@ WORKDIR /app
 
 # Copy project files
 COPY pyproject.toml .
-COPY src/tubex /app/src/tubex
+COPY src/tubex /app/src/tubez
 
 # Install python dependencies
 RUN pip install .
@@ -16,4 +16,4 @@ RUN pip install .
 EXPOSE 8089
 
 # Define the command to run the app
-CMD ["tubex"]
+CMD ["tubez"]
