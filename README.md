@@ -7,7 +7,7 @@
   </p>
   <p>
     <a href="https://pypi.org/project/TubeZ/"><img alt="PyPI" src="https://img.shields.io/pypi/v/TubeZ?color=blue&label=pypi%20package"></a>
-    <a href="https://github.com/juniorsir/TubeZ/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/juniorsir/TubeZ"></a>
+    <a href="https://github.com/juniorsir/TubeZ/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/juniorsir/TubeZ?cache_bust=1"></a>
   </p>
 </div>
 
