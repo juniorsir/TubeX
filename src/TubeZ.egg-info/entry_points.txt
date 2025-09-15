@@ -1,0 +1,2 @@
+[console_scripts]
+tubez = tubez.cli:main

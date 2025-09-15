@@ -85,6 +85,7 @@ def search():
 
     url_pattern = re.compile(r'https?://\S+')
     
+ 
     if url_pattern.match(query):
         if 'youtube.com' in query and 'list=RD' in query:
             match = re.search(r'v=([^&]+)', query) or re.search(r'list=RD([^&]+)', query)
@@ -92,13 +93,12 @@ def search():
                 video_id = match.group(1)
                 flash("YouTube Mix playlists are not supported. Loading the starting video of the mix instead.", "info")
                 return redirect(url_for('formats', video_id=video_id))
-        
         playlist_indicators = ['list=', 'playlist?', '/c/', '/channel/', '/user/']
         if any(indicator in query for indicator in playlist_indicators):
             return redirect(url_for('playlist', playlist_url=query))
         
+        video_id = query
         return redirect(url_for('formats', video_id=video_id))
-    
     else:
         try:
             videos_search = VideosSearch(query, limit=12)
@@ -107,7 +107,6 @@ def search():
         except Exception as e:
             flash(f"An error occurred during YouTube search: {e}", "error")
             return redirect(url_for('index'))
-
 
 @app.route('/formats/<path:video_id>')
 @login_required
@@ -347,7 +346,7 @@ def download_file(filename):
 @app.route('/api/check_update')
 def check_update():
     try:
-        pypi_url = f"https://pypi.org/pypi/TubeX/json"
+        pypi_url = f"https://pypi.org/pypi/TubeZ/json"
         response = requests.get(pypi_url, timeout=5)
         response.raise_for_status()
         latest = response.json()['info']['version']

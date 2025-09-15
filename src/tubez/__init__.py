@@ -4,8 +4,10 @@ from pathlib import Path
 from flask import Flask
 
 # --- Package Information ---
-__version__ = "1.0.1" # Version bump for new features
-
+__version__ = "1.0.3"
+authors = [
+    {"name": "JuniorSir", "email": "juniorsir011@gmail.com"}
+]
 # --- Default Configuration ---
 DEFAULT_CONFIG = {
     "DOWNLOAD_PATH": str(Path.home() / 'Downloads' / 'TubeX'),

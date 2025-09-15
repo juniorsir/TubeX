@@ -1,0 +1,25 @@
+Metadata-Version: 2.4
+Name: TubeZ
+Version: 1.0.3
+Summary: A self-hosted web dashboard to search, play, and download video or audio from hundreds of sites using yt-dlp.
+Author-email: JuniorSir <juniorsir011@gmail.com>
+License-Expression: MIT
+Project-URL: Homepage, https://github.com/juniorsir/TubeX
+Project-URL: Bug Tracker, https://github.com/juniorsir/TubeX/issues
+Keywords: youtube,downloader,yt-dlp,flask,termux,video,audio
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Multimedia :: Video
+Classifier: Topic :: Internet :: WWW/HTTP :: WSGI :: Application
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Flask
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: Flask
+Requires-Dist: yt-dlp
+Requires-Dist: youtube-search-python
+Requires-Dist: requests
+Requires-Dist: packaging
+Requires-Dist: waitress
+Dynamic: license-file
