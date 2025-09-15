@@ -1,16 +1,16 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/juniorsir/TubeX/main/.github/assets/logo.png" alt="TubeX Logo" width="150"/>
-  <h1>TubeX</h1>
+  <img src="https://raw.githubusercontent.com/juniorsir/TubeZ/main/.github/assets/logo.png" alt="TubeZ Logo" width="150"/>
+  <h1>TubeZ</h1>
   <p>
     A powerful, self-hosted web dashboard to search, play, and download video or audio from hundreds of sites using yt-dlp.
   </p>
   <p>
     <a href="https://pypi.org/project/TubeZ/"><img alt="PyPI" src="https://img.shields.io/pypi/v/TubeZ?color=blue&label=pypi%20package"></a>
-    <a href="https://github.com/juniorsir/TubeX/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/juniorsir/TubeX"></a>
+    <a href="https://github.com/juniorsir/TubeZ/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/juniorsir/TubeZ"></a>
   </p>
 </div>
 
-![TubeX Demo GIF](https://raw.githubusercontent.com/juniorsir/TubeX/main/.github/assets/demo.gif)
+![TubeZ Demo GIF](https://raw.githubusercontent.com/juniorsir/TubeZ/main/.github/assets/demo.gif)
 
 ---
 
