@@ -9,32 +9,21 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <!-- =================================================================
-         DEFINITIVE RESPONSIVE NAVBAR
-         - The Download Icon is now always visible next to the hamburger.
-    ================================================================== -->
     <nav class="navbar navbar-expand-lg sticky-top mb-4">
         <div class="container">
-            <!-- Brand is always visible on the far left -->
             <a class="navbar-brand fw-bold me-auto" href="{{ url_for('index') }}"><i class="bi bi-film"></i> TubeX</a>
-            
-            <!-- These items are always visible on the far right -->
             <div class="d-flex align-items-center">
                 {% if session.logged_in %}
-                    <!-- The Download Icon (always visible) -->
+                 
                     <a id="nav-download-link" href="{{ url_for('files') }}" class="nav-link nav-download-icon me-2" title="View Downloads">
                         <i class="bi bi-download fs-5"></i>
                         <span id="nav-download-badge" class="nav-download-badge d-none">0</span>
                     </a>
                 {% endif %}
-
-                <!-- Hamburger Button (only shown on mobile) -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
                     <span class="navbar-toggler-icon"></span>
                 </button>
             </div>
-
-            <!-- This div and its contents will collapse into the hamburger menu -->
             <div class="collapse navbar-collapse" id="mainNavbar">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
                     {% if session.logged_in %}
@@ -123,7 +112,7 @@
                 }
             }).catch(error => { updateIconEl.innerHTML = '<i class="bi bi-exclamation-triangle-fill text-warning"></i>'; });
 
-            // --- Download Queue Polling Logic ---
+           
             const downloadIcon = document.getElementById('nav-download-link').querySelector('i');
             const downloadBadge = document.getElementById('nav-download-badge');
             let lastQueueCount = 0;

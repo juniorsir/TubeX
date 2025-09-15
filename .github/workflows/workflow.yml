@@ -1,0 +1,46 @@
+# This is the name of the GitHub Actions workflow.
+name: Publish Python Package to PyPI
+
+# This specifies when the workflow should run.
+on:
+  # We will trigger this manually by creating a new "release" on GitHub.
+  release:
+    types: [published]
+
+# These are the permissions the workflow needs to interact with GitHub and PyPI.
+permissions:
+  contents: read
+  id-token: write # This is the crucial permission for Trusted Publishing
+
+jobs:
+  # This defines a single job named "pypi-publish".
+  pypi-publish:
+    name: Upload release to PyPI
+    runs-on: ubuntu-latest # The job will run on a standard Linux virtual machine.
+    environment: pypi # Specifies the deployment environment (optional but good practice).
+    
+    steps:
+      # Step 1: Check out the repository code.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Set up the Python version.
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      # Step 3: Install dependencies, including the 'build' tool.
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install build
+      
+      # Step 4: Build the package files (the .whl and .tar.gz).
+      - name: Build package
+        run: python -m build
+
+      # Step 5: Publish the package to PyPI using the trusted publisher action.
+      # This action handles all the complex token exchange with PyPI securely.
+      - name: Publish package to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1

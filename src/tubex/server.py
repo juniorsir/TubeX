@@ -21,10 +21,6 @@ from functools import wraps
 from . import app, __version__, DOWNLOAD_FOLDER, HISTORY_FILE, CONFIG_FILE, load_config, DEFAULT_CONFIG
 from .queue_manager import DOWNLOAD_QUEUE, DOWNLOAD_TASKS
 
-# --- ======================================================= ---
-# ---               Authentication & Security                 ---
-# --- ======================================================= ---
-
 def login_required(f):
     """Decorator to protect routes with a password if one is set."""
     @wraps(f)
@@ -34,10 +30,6 @@ def login_required(f):
             return redirect(url_for('login', next=request.url))
         return f(*args, **kwargs)
     return decorated_function
-
-# --- ======================================================= ---
-# ---                    Helper Functions                     ---
-# --- ======================================================= ---
 
 def load_history():
     """Loads viewing history from the JSON file."""
@@ -79,21 +71,11 @@ def url_encode_path_filter(s):
     """A template filter to safely encode a string for use in a URL path."""
     return urllib.parse.quote(s, safe='')
 
-# --- ======================================================= ---
-# ---                 Main User-Facing Routes                 ---
-# --- ======================================================= ---
-
 @app.route('/')
 @login_required
 def index():
     history = load_history()
     return render_template('index.html', history=history)
-
-# src/tubex/server.py
-
-# src/tubex/server.py
-
-# ... (imports and other functions)
 
 @app.route('/search')
 @login_required
@@ -103,11 +85,7 @@ def search():
 
     url_pattern = re.compile(r'https?://\S+')
     
-    # --- CORRECTED LOGIC WITH PROPER INDENTATION ---
     if url_pattern.match(query):
-        # This code is now correctly indented inside the 'if' block.
-        
-        # 1. Check for the MOST specific case first: YouTube Mixes
         if 'youtube.com' in query and 'list=RD' in query:
             match = re.search(r'v=([^&]+)', query) or re.search(r'list=RD([^&]+)', query)
             if match:
@@ -115,16 +93,13 @@ def search():
                 flash("YouTube Mix playlists are not supported. Loading the starting video of the mix instead.", "info")
                 return redirect(url_for('formats', video_id=video_id))
         
-        # 2. Check for ANY other type of playlist or channel URL.
         playlist_indicators = ['list=', 'playlist?', '/c/', '/channel/', '/user/']
         if any(indicator in query for indicator in playlist_indicators):
             return redirect(url_for('playlist', playlist_url=query))
         
-        # 3. If it's a URL but not a mix or playlist, it must be a single video.
         return redirect(url_for('formats', video_id=video_id))
     
     else:
-        # This 'else' block correctly corresponds to the 'if url_pattern.match(query):'
         try:
             videos_search = VideosSearch(query, limit=12)
             results = videos_search.result()['result']
@@ -212,10 +187,6 @@ def progress_page(task_id):
         return redirect(url_for('files'))
     return render_template('progress.html', task_id=task_id, title=task.get('title'))
 
-# --- ======================================================= ---
-# ---                Authentication Routes                  ---
-# --- ======================================================= ---
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     password = app.config.get("PASSWORD")
@@ -236,12 +207,6 @@ def logout():
     flash('You were logged out.', 'success')
     return redirect(url_for('login'))
 
-# --- ======================================================= ---
-# ---                   API & Action Routes                   ---
-# --- ======================================================= ---
-
-# src/tubex/server.py
-
 def add_to_download_queue(video_id, format_code, title, is_video_only=False, is_audio_only=False, sub_lang=None):
     """Helper function to add a download job to the global queue."""
     task_id = str(uuid.uuid4())
@@ -249,15 +214,14 @@ def add_to_download_queue(video_id, format_code, title, is_video_only=False, is_
     base_command = ['yt-dlp', '-o', output_template, '--progress', '--restrict-filenames']
     
     if is_audio_only:
-        # THIS IS THE FIX: Add the '--' separator before the ID
         command = base_command + ['-f', format_code, '-x', '--audio-format', app.config.get("DEFAULT_AUDIO_FORMAT", "m4a"), '--', video_id]
     else:
         final_format_code = f"{format_code}+bestaudio[ext=m4a]/best" if is_video_only else format_code
-        # THIS IS THE FIX: Add the '--' separator before the ID
+       
         command = base_command + ['-f', final_format_code, '--merge-output-format', 'mp4', '--ppa', 'FFmpegMerger:"-o \\"%(filepath)q\\""', '--', video_id]
     
     if sub_lang and sub_lang != 'none':
-        # Subtitle flags must come BEFORE the '--' separator
+       
         command = command[:-2] + ['--write-subs', '--sub-lang', sub_lang, '--embed-subs'] + command[-2:]
 
     DOWNLOAD_TASKS[task_id] = {'status': 'downloading', 'stage': 'Waiting in queue...', 'progress': 0, 'title': title, 'id': task_id, 'timestamp': time.time()}
