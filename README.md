@@ -28,6 +28,75 @@
 
 ---
 
+## 🖼️ Gallery
+
+### 🔍 Search & Discover
+*Find content from hundreds of sites with a clean search interface or by pasting a URL.*
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tr align="center">
+    <td width="50%" style="padding:10px;">
+      <div style="padding: 4px; background-image: url(https://i.imgur.com/6OKvA6N.gif); background-size: cover; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+        <img src="https://github.com/juniorsir/TubeZ/blob/main/.github/assets/img1.png?raw=true" alt="Main Search Page" style="border-radius: 5px; display: block; width: 100%;">
+      </div>
+    </td>
+    <td width="50%" style="padding:10px;">
+      <div style="padding: 4px; background-image: url(https://i.imgur.com/6OKvA6N.gif); background-size: cover; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+        <img src="https://github.com/juniorsir/TubeZ/blob/main/.github/assets/img2.png?raw=true" alt="Search Results" style="border-radius: 5px; display: block; width: 100%;">
+      </div>
+    </td>
+  </tr>
+</table>
+
+### ▶️ Play & Choose
+*Stream video directly in the browser or select from a detailed list of download formats.*
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tr align="center">
+    <td width="50%" style="padding:10px;">
+      <div style="padding: 4px; background-image: url(https://i.imgur.com/6OKvA6N.gif); background-size: cover; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+        <img src="https://github.com/juniorsir/TubeZ/blob/main/.github/assets/img1.png?raw=true" alt="Video Player" style="border-radius: 5px; display: block; width: 100%;">
+      </div>
+    </td>
+    <td width="50%" style="padding:10px;">
+      <div style="padding: 4px; background-image: url(https://i.imgur.com/6OKvA6N.gif); background-size: cover; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+        <img src="https://github.com/juniorsir/TubeZ/blob/main/.github/assets/img4.png?raw=true" alt="Download Options" style="border-radius: 5px; display: block; width: 100%;">
+      </div>
+    </td>
+  </tr>
+</table>
+
+### 📥 Download Management
+*A powerful background queue handles all your downloads. Manage completed files with ease.*
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tr align="center">
+    <td width="50%" style="padding:10px;">
+      <div style="padding: 4px; background-image: url(https://i.imgur.com/6OKvA6N.gif); background-size: cover; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+        <img src="https://github.com/juniorsir/TubeZ/blob/main/.github/assets/img3.png?raw=true" alt="Active Downloads Queue" style="border-radius: 5px; display: block; width: 100%;">
+      </div>
+    </td>
+    <td width="50%" style="padding:10px;">
+      <div style="padding: 4px; background-image: url(https://i.imgur.com/6OKvA6N.gif); background-size: cover; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+        <img src="https://github.com/juniorsir/TubeZ/blob/main/.github/assets/img9.png?raw=true" alt="Completed Files List" style="border-radius: 5px; display: block; width: 100%;">
+      </div>
+    </td>
+  </tr>
+</table>
+
+### ⚙️ Share & Configure
+*Easily connect other devices with a QR code and configure the application to your needs.*
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tr align="center">
+    <td width="50%" style="padding:10px;">
+      <div style="padding: 4px; background-image: url(https://i.imgur.com/6OKvA6N.gif); background-size: cover; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+        <img src="https://github.com/juniorsir/TubeZ/blob/main/.github/assets/img10.png?raw=true" alt="QR Code Sharing" style="border-radius: 5px; display: block; width: 100%;">
+      </div>
+    </td>
+    <td width="50%" style="padding:10px;">
+      <div style="padding: 4px; background-image: url(https://i.imgur.com/6OKvA6N.gif); background-size: cover; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+        <img src="https://github.com/juniorsir/TubeZ/blob/main/.github/assets/img11.png?raw=true" alt="Settings Page" style="border-radius: 5px; display: block; width: 100%;">
+      </div>
+    </td>
+  </tr>
+</table>
 ## ✨ Features in Depth
 
 -   **Modern & Responsive UI**: Clean, beautiful, and mobile-friendly interface built with Bootstrap. It includes a dark mode theme and a fully responsive layout that works on any device.
