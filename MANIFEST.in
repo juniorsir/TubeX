@@ -1,4 +1,0 @@
-# MANIFEST.in
-
-graft src/tubez/templates
-graft src/tubez/static
